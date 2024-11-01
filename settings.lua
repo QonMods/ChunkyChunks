@@ -15,22 +15,22 @@ data:extend({
     allowed_values = {'Disabled', 'ALT-mode', 'Always'},
     order = '1-'
   },{
-    type = 'double-setting',
+    type = 'string-setting',
     name = 'chunkychunks-size-1',
     setting_type = 'runtime-per-user',
-    default_value = 224,
+    default_value = '224',
     order = '1-a',
   },{
-    type = 'double-setting',
+    type = 'string-setting',
     name = 'chunkychunks-offset-1',
     setting_type = 'runtime-per-user',
-    default_value = 0,
+    default_value = '0',
     order = '1-b',
   },{
-    type = 'double-setting',
+    type = 'string-setting',
     name = 'chunkychunks-spacing-1',
     setting_type = 'runtime-per-user',
-    default_value = 0,
+    default_value = '0',
     order = '1-c',
   },{
     type = 'string-setting',
@@ -55,22 +55,22 @@ data:extend({
     allowed_values = {'Disabled', 'ALT-mode', 'Always'},
     order = '2-'
   }, {
-    type = 'double-setting',
+    type = 'string-setting',
     name = 'chunkychunks-size-2',
     setting_type = 'runtime-per-user',
-    default_value = 32,
+    default_value = '32',
     order = '2-a',
   },{
-    type = 'double-setting',
+    type = 'string-setting',
     name = 'chunkychunks-offset-2',
     setting_type = 'runtime-per-user',
-    default_value = 0,
+    default_value = '0',
     order = '2-b',
   },{
-    type = 'double-setting',
+    type = 'string-setting',
     name = 'chunkychunks-spacing-2',
     setting_type = 'runtime-per-user',
-    default_value = 0,
+    default_value = '0',
     order = '2-c',
   },{
     type = 'string-setting',
@@ -95,22 +95,22 @@ data:extend({
     allowed_values = {'Disabled', 'ALT-mode', 'Always'},
     order = '3-'
   },{
-    type = 'double-setting',
+    type = 'string-setting',
     name = 'chunkychunks-size-3',
     setting_type = 'runtime-per-user',
-    default_value = 0,
+    default_value = '0',
     order = '3-a',
   },{
-    type = 'double-setting',
+    type = 'string-setting',
     name = 'chunkychunks-offset-3',
     setting_type = 'runtime-per-user',
-    default_value = 0,
+    default_value = '0',
     order = '3-b',
   },{
-    type = 'double-setting',
+    type = 'string-setting',
     name = 'chunkychunks-spacing-3',
     setting_type = 'runtime-per-user',
-    default_value = 0,
+    default_value = '0',
     order = '3-c',
   },{
     type = 'string-setting',

@@ -18,13 +18,7 @@ data:extend({
     name = "chunkychunks-toggle",
     action = "lua",
     toggleable = true,
-    icon =
-    {
-      filename = "__ChunkyChunks__/graphics/icon/shortcut-toggle.png",
-      priority = "extra-high-no-scale",
-      size = 64,
-      scale = 1,
-      flags = {"icon"}
-    },
+    icon = "__ChunkyChunks__/graphics/icon/shortcut-toggle.png",
+    small_icon = "__ChunkyChunks__/graphics/icon/shortcut-toggle.png"
   },
 })

@@ -106,7 +106,7 @@ function enabled(player_index, set)
 end
 
 function toggle(event)
-    -- game.print(game.table_to_json(event))
+    -- game.print(helpers.table_to_json(event))
     if event.input_name ~= HOTKEY_EVENT_NAME and event.prototype_name ~= SHORTCUT_NAME then return end
     enabled(event.player_index, not enabled(event.player_index))
 end
@@ -172,7 +172,7 @@ function parseColour(s)
     else
         color.a = 1
     end
-    -- game.print(game.table_to_json(a))
+    -- game.print(helpers.table_to_json(a))
     return color
 end
 
@@ -216,17 +216,17 @@ end
 
 script.on_event(defines.events.on_tick, function(event)
     -- game.print(filter == nil)
-    -- game.print(game.table_to_json({#rendering.get_all_ids('ChunkyChunks'), #rendering.get_all_ids()}))
-    -- game.print(game.table_to_json(rendering.get_all_ids('ChunkyChunks')))
-    -- for _, id in pairs(rendering.get_all_ids('ChunkyChunks')) do rendering.destroy(id) end
+    -- game.print(helpers.table_to_json({#rendering.get_all_ids('ChunkyChunks'), #rendering.get_all_ids()}))
+    -- game.print(helpers.table_to_json(rendering.get_all_ids('ChunkyChunks')))
+    -- for _, id in pairs(rendering.get_all_ids('ChunkyChunks')) do id.destroy() end
     -- rendering.clear('ChunkyChunks')
 
     -- iterate_surfaces()
 
-    for _, blockset in pairs(global.temp_lines or {}) do for _, id in pairs(blockset) do rendering.destroy(id) end end
-    global.temp_lines = {}
+    for _, blockset in pairs(storage.temp_lines or {}) do for _, id in pairs(blockset) do id.destroy() end end
+    storage.temp_lines = {}
 
-    for index, surface in pairs(global.surfaces) do
+    for index, surface in pairs(storage.surfaces) do
         local empty = true
         for _ in pairs(surface) do
             empty = false
@@ -236,39 +236,39 @@ script.on_event(defines.events.on_tick, function(event)
     end
 
     for _, p in pairs(game.connected_players) do
-        global.players[p.index] = global.players[p.index] or {}
-        local d = global.players[p.index]
+        storage.players[p.index] = storage.players[p.index] or {}
+        local d = storage.players[p.index]
 
         if d.delete_lines and #d.delete_lines > 0 then
             local blockset = table.remove(d.delete_lines)
             if game.surfaces[blockset.surface_index] and game.surfaces[blockset.surface_index].valid then
-                for _, id in pairs(blockset.lines) do rendering.destroy(id) end
+                for _, id in pairs(blockset.lines) do id.destroy() end
             end
             -- for i = 1, math.min(100, #blockset) do
             --     local id = table.remove(blockset)
-            --     rendering.destroy(id)
+            --     id.destroy()
             -- end
             -- if #blockset > 0 then table.insert(d.delete_lines, blockset) end
             -- p.print('lines deleted '..#d.delete_lines)
         end
 
         d.surfaces = d.surfaces or {}
-        global.surfaces[p.surface.index] = global.surfaces[p.surface.index] or {} -- global.surfaces[x] will be nil instead of {} until a player enters it
+        storage.surfaces[p.surface.index] = storage.surfaces[p.surface.index] or {} -- storage.surfaces[x] will be nil instead of {} until a player enters it
         d.covered_block_count = d.covered_block_count or 0
         d.lines = d.lines or {}
 
-        if d.covered_block_count < #global.mixed_surface_blocks then
+        if d.covered_block_count < #storage.mixed_surface_blocks then
             d.covered_block_count = d.covered_block_count + 1
-            local block_data = global.mixed_surface_blocks[d.covered_block_count]
+            local block_data = storage.mixed_surface_blocks[d.covered_block_count]
             if game.surfaces[block_data.surface_index] == nil or not game.surfaces[block_data.surface_index].valid then
-                table.remove(global.mixed_surface_blocks, d.covered_block_count)
-                for _, pd in pairs(global.players) do
+                table.remove(storage.mixed_surface_blocks, d.covered_block_count)
+                for _, pd in pairs(storage.players) do
                     if pd.covered_block_count >= d.covered_block_count then
                         pd.covered_block_count = pd.covered_block_count - 1
                     end
                 end
             else
-                -- p.print('covered '..d.covered_block_count..'  to cover '..#global.mixed_surface_blocks)
+                -- p.print('covered '..d.covered_block_count..'  to cover '..#storage.mixed_surface_blocks)
                 for g = 1, GRIDS_COUNT do
                     local a = map({'size', 'offset', 'spacing', 'color', 'enabled'}, function(q) return p.mod_settings['chunkychunks-'..q..'-'..g].value end)
                     local size    = makeLen2(parseDoubles(a[1]))
@@ -311,13 +311,13 @@ script.on_event(defines.events.on_tick, function(event)
         --             local only_in_alt_mode = (enabled == 'ALT-mode')
         --             local block = player_block(p.index, size, offset, spacing)
         --             local lines = chunky({p}, p.surface, block.topleft, block.bottomright, size, offset, spacing, color, only_in_alt_mode)
-        --             table.insert(global.temp_lines, {surface_index = block_data.surface_index, lines = lines})
+        --             table.insert(storage.temp_lines, {surface_index = block_data.surface_index, lines = lines})
         --             if p.mod_settings['chunkychunks-centre-mark-'..g].value and size ~= nil and math.max(size[1], size[2]) >= 2 then
         --                 -- offset = add(parseXY(a[2]), mult(size, 0.5))
         --                 local size_ = map(size, function(q) return math.max(1, math.floor((math.log(q)/math.log(2)) - 4)) end)
         --                 spacing = add(mult(size, 0.5), mult(size_, -1))
         --                 local lines = chunky({p}, p.surface, block.topleft, block.bottomright, size, offset, spacing, color, only_in_alt_mode)
-        --                 table.insert(global.temp_lines, {surface_index = block_data.surface_index, lines = lines})
+        --                 table.insert(storage.temp_lines, {surface_index = block_data.surface_index, lines = lines})
         --             end
         --         end
         --     end
@@ -331,15 +331,15 @@ function blockify(chunk)
     -- local block_pos = chunkifyPosition(position, block)
     -- local block_pos = {math.floor(chunk.position[1] * 32 / 1e4), math.floor(chunk.position[2] * 32 / 1e4)} --
 
-    -- game.print(game.table_to_json({chunk, chunk.surface.index}))
+    -- game.print(helpers.table_to_json({chunk, chunk.surface.index}))
 
     local block_pos = map(chunk.position, function(q) return math.floor(q * 32 / BLOCK_SIZE) end)
     local surface_index = chunk.surface.index
-    local gsurfd = global.surfaces[surface_index]
+    local gsurfd = storage.surfaces[surface_index]
     if gsurfd then
-        if not gsurfd[game.table_to_json(block_pos)] then
-            gsurfd[game.table_to_json(block_pos)] = block_pos
-            table.insert(global.mixed_surface_blocks, {surface_index = surface_index, block_pos = block_pos})
+        if not gsurfd[helpers.table_to_json(block_pos)] then
+            gsurfd[helpers.table_to_json(block_pos)] = block_pos
+            table.insert(storage.mixed_surface_blocks, {surface_index = surface_index, block_pos = block_pos})
         end
     end
 end
@@ -349,7 +349,7 @@ function iterate_surfaces()
     for _, surface in pairs(game.surfaces) do
         c = c + iterate_surface_chunks(surface)
     end
-    -- game.print(game.table_to_json({c, #global.mixed_surface_blocks, map(global.mixed_surface_blocks, function(q) return {q.surface_index, q.block_pos} end)}))
+    -- game.print(helpers.table_to_json({c, #storage.mixed_surface_blocks, map(storage.mixed_surface_blocks, function(q) return {q.surface_index, q.block_pos} end)}))
 end
 
 function iterate_surface_chunks(surface)
@@ -362,7 +362,7 @@ function iterate_surface_chunks(surface)
 end
 
 script.on_event(defines.events.on_chunk_generated, function(event) blockify({position = fromXY(event.position), surface = event.surface}) end)
-script.on_event(defines.events.on_surface_created, function(event) global.surfaces[event.surface_index] = {} end)
+script.on_event(defines.events.on_surface_created, function(event) storage.surfaces[event.surface_index] = {} end)
 
 script.on_event(defines.events.on_lua_shortcut, toggle)
 script.on_event('chunkychunks-toggle', toggle)
@@ -370,16 +370,16 @@ script.on_event('chunkychunks-toggle', toggle)
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     -- player_index :: uint (optional): The player who changed the setting or nil if changed by script.
     -- setting :: string: The setting name that changed.
-    -- setting_type :: string: The setting type: "runtime-per-user", or "runtime-global".
+    -- setting_type :: string: The setting type: "runtime-per-user", or "runtime-storage".
 
     -- game.print(event.tick..'  '..event.setting)
-    -- log(event.tick..'  '..game.table_to_json(event))
+    -- log(event.tick..'  '..helpers.table_to_json(event))
 
     if not string.match(event.setting, '^chunkychunks') then return nil end
     if not event.player_index then return nil end
 
-    local d = global.players[event.player_index]
-    if not d then -- if game starts paused then global.players is uninitialised and we can't enable grids anyways
+    local d = storage.players[event.player_index]
+    if not d then -- if game starts paused then storage.players is uninitialised and we can't enable grids anyways
         game.print(script.mod_name..': Not yet possible to modify grid settings on tick 0, and the grids don\'t update while the game is paused.')
         return nil -- This is just to not crash. It will mean the settings changed will just be discarded on tick 0.
         -- TODO make it possible to enable grids while paused and on tick 0 (init data and build grids off tick handler).
@@ -389,7 +389,7 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     if d.mod_setting_changed_tick == event.tick then return nil end -- run handler once per tick per player
 
     d.mod_setting_changed_tick = event.tick
-    -- game.print('----------------------'..game.table_to_json(event))
+    -- game.print('----------------------'..helpers.table_to_json(event))
     -- if d.delete_lines and #d.delete_lines > 0 then
     --     game.print('deleting all lines')
 
@@ -399,7 +399,7 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     while d.delete_lines and #d.delete_lines > 0 do
         local blockset = table.remove(d.delete_lines)
         if game.surfaces[blockset.surface_index] and game.surfaces[blockset.surface_index].valid then
-            for _, id in pairs(blockset.lines) do rendering.destroy(id) end
+            for _, id in pairs(blockset.lines) do id.destroy() end
         end
     end
     d.delete_lines = d.lines
@@ -423,13 +423,13 @@ end)
 
 function clean()
     rendering.clear('ChunkyChunks')
-    -- for k in pairs(global) do
-    --     global[k] = nil
+    -- for k in pairs(storage) do
+    --     storage[k] = nil
     -- end
-    global.surfaces = {}
-    global.mixed_surface_blocks = {}
-    global.players = {}
-    global.temp_lines = {}
+    storage.surfaces = {}
+    storage.mixed_surface_blocks = {}
+    storage.players = {}
+    storage.temp_lines = {}
 
     iterate_surfaces()
 end
