@@ -1,0 +1,109 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+  Bugfixes:
+    - No longer crashes when settings are changed on tick 0 (which would happen in map editor in
+      new maps) where the player data structures are uninitialised.
+      Thanks modo_lv for the report!
+      https://mods.factorio.com/mod/ChunkyChunks/discussion/60492bf907831390d90913de
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+  Info:
+    - Updated for Factorio v1.1
+---------------------------------------------------------------------------------------------------
+Version: 1.4.5
+Date: 2020-08-26 15:28
+  Bugfixes:
+    - Fixed that mod reloaded grids even when runtime settings of another mod was executed.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.4
+Date: 2020-08-18 11:43
+  Bugfixes:
+    - Fixed shortcut button so that its visual pressed down state is synced to settings
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 2020-08-17 19:34
+  Bugfixes:
+    - Fixed missing check for deleted surfaces, thanks HanBai for the report
+      https://mods.factorio.com/mod/ChunkyChunks/discussion/5f3abb45b7a232fc87dcb54e
+  Features:
+    - Shortcut and hotkey toggles are back. But they are not optimised yet, so don't spam them
+      too much ;> They kind of slipped in since they were kind of implemented and I had to fix the bug.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 2020-08-01 22:00
+  Bugfixes:
+    - Workaround for weird treatment of alpha values by Factorio rendering API.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 2020-08-01 19:53
+  Bugfixes:
+    - Fixed mising init setup. Thanks Poctim for the report!
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2020-08-01 13:23
+  Major Features:
+    - Global grid! Now you can pan anywhere on the map (when zoomed-to-world) and see your grids!
+      Thanks ZZaphodd for the suggestion.
+  Optimisations:
+    - ChunkyChunks only does things when you change your settings now, so CPU time should drop to near 0
+      except for some seconds after changing your settings.
+  Changes:
+    - Toggling grids with shortcut and hotkey are removed. Instead a new setting is used:
+      Grids are enabled when ALT-mode is enabled, always on or the grid is simply disabled.
+      Thanks slippycheeze for the suggestion!
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+  Bugfixes:
+    - Now correctly discards incorrectly formatted strings instead of crashing.
+      Thanks geostar1024 for the bug report!
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+  Features:
+    - Option to have crosses (+) in the corners instead of filled in lines. Set spacing to a
+      negative number to set the size of the cross.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+  Locale:
+    - Russian locale added, thanks to TheLastEagle for translation!
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+  Features:
+    - Option to show the centre of each grid with a square marking. Requested by slippycheeze.
+    - 3rd grid added. Requested by ZZaphodd.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+  Info:
+    - Updated for Factorio v0.18
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+  Bugfixes:
+    - Line spacing >= size / 2 no longer crashes the mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+  Features:
+    - Line spacing added. You can now get separately drawn squares with some spacing in between.
+    - Size, offset and spacing can all have separate X and Y values. Just type in two space separated values for any of those fields.
+    - Size, offset and spacing can now be doubles, so 0.5 is possible.
+  Info:
+    - Your previoous ChunkyChunks settings will be reset to default values with this update.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+  Features:
+    - Line colours can now be specified as settings due to being requested by kyoshiharu and diego00b
+      https://mods.factorio.com/mod/ChunkyChunks/discussion/5cc4f76f073cd9000dfb37f7
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+  Changes:
+    - Made line colours alpha always 1 regardless of player colour alpha channel value.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+  Bugfixes:
+    - Fixed it so that the shortcuts that don't belong to ChunkyChunks can't trigger the toggling.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+  Bugfixes:
+    - Fixed it so that the hotkey and shortcut works again.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+  Major Features:
+    - Initial release
